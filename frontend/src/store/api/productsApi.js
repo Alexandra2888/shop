@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-;
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
@@ -9,7 +8,11 @@ export const productApi = createApi({
         url: "/products",
         params: {
           page: params?.page,
-          keyword: params?.keyword
+          keyword: params?.keyword,
+          category: params?.category,
+          "price[gte]": params.min,
+          "price[lte]": params.max,
+          "ratings[gte]": params?.ratings,
         },
       }),
     }),
