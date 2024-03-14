@@ -20,8 +20,8 @@ const Header = () => {
     <nav className="navbar row">
       <div className="col-12 col-md-3 ps-5">
         <div className="navbar-brand">
-          <a href="/">
-            <img src="/assets/shopit_logo.png" alt="ShopIT Logo" />
+          <a href="/" style={{color:"orange", textDecoration:"none"}}>
+            eShop 
           </a>
         </div>
       </div>

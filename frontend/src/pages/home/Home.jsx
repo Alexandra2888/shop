@@ -58,7 +58,7 @@ const Home = () => {
           <div className="row">
             {data?.products?.map((product) => (
               // eslint-disable-next-line react/jsx-key
-              <ProductItem product={product} columnSize={columnSize} />
+              <ProductItem product={product} columnSize={columnSize} key={product._id}/>
             ))}
           </div>
         </section>
