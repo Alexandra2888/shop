@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const {isLoading} = useGetMeQuery();
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
   const [logout] = useLazyLogoutQuery();
 
   const navigate = useNavigate();
@@ -31,11 +32,10 @@ const Header = () => {
       <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
         <a href="/cart" style={{ textDecoration: "none" }}>
           <span id="cart" className="ms-3">
-            {" "}
-            Cart{" "}
+            Cart
           </span>
           <span className="ms-1" id="cart_count">
-            0
+            { cartItems?.length }
           </span>
         </a>
 

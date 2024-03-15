@@ -13,6 +13,7 @@ import UploadAvatar from "./pages/profile/uploadAvatar/UploadAvatar";
 import UpdatePassword from "./pages/profile/updatePassword/UpdatePassword";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
 import ResetPassword from "./pages/auth/resetPassword/ResetPassword";
+import Cart from "./pages/cart/Cart";
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/password/forgot" element={<ForgotPassword />} />
             <Route path="/password/reset/:token" element={<ResetPassword />} />
-
+            <Route path="/cart" element={<Cart/>}/>
 
             <Route
               path="/me/profile"

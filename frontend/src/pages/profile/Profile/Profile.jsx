@@ -1,10 +1,12 @@
 import UserLayout from "../../../components/layout/userLayout/UserLayout";
 import { useSelector } from "react-redux";
+import MetaData from "../../../components/metadata/Metadata";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
   return (
     <UserLayout>
+       <MetaData title={"Your Profile"} />
       <div className="row justify-content-around mt-5 user-info">
         <div className="col-12 col-md-3">
           <figure className="avatar avatar-profile">

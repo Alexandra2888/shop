@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import {useLoginMutation} from "../../../store/api/authApi";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import MetaData from "../../../components/metadata/Metadata";
 
 const Login = () => {
 const [email, setEmail] = useState("");
@@ -33,6 +34,8 @@ useEffect(() => {
     };
 
   return (
+    <>
+      <MetaData title={"Login"} />
     <div className="row wrapper">
     <div className="col-10 col-lg-5">
       <form className="shadow rounded bg-body" onSubmit={submitHandler}>
@@ -86,6 +89,7 @@ useEffect(() => {
       </form>
     </div>
   </div>
+  </>
   )
 }
 

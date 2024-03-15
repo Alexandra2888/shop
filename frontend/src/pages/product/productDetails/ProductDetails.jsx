@@ -4,9 +4,16 @@ import { useGetProductDetailsQuery } from "../../../store/api/productsApi";
 import { toast } from "react-hot-toast";
 import Loader from "../../../components/loader/Loader";
 import StarRatings from "react-star-ratings";
+import { useDispatch } from "react-redux";
+import { setCartItem } from "../../../store/features/cartSlice";
+import MetaData from "../../../components/metadata/Metadata";
 
 const ProductDetails = () => {
   const params = useParams();
+  const dispatch = useDispatch();
+
+
+  const [quantity, setQuantity] = useState(0);
 
   const { data, isLoading, error, isError } = useGetProductDetailsQuery(
     params?.id
@@ -14,6 +21,34 @@ const ProductDetails = () => {
   const product = data?.product;
 
   const [activeImg, setActiveImg] = useState("");
+
+  const decreaseQty = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 0 ? prevQuantity - 1 : 0));
+  };
+  
+  
+  const increaseQty = () => {
+    if (product?.stock > quantity) {
+      setQuantity((prevQuantity) => prevQuantity + 1);
+    } else {
+      toast.error("Sorry, you've reached the maximum available stock.");
+    }
+  };
+
+  const setItemToCart = () => {
+    const cartItem = {
+      product: product?._id,
+      name: product?.name,
+      price: product?.price,
+      image: product?.images[0]?.url,
+      stock: product?.stock,
+      quantity,
+    };
+
+    dispatch(setCartItem(cartItem));
+    toast.success("Item added to Cart");
+  };
+
 
   useEffect(() => {
     setActiveImg(
@@ -32,6 +67,8 @@ const ProductDetails = () => {
   if (isLoading) return <Loader />;
 
   return (
+    <>
+          <MetaData title={product?.name} />
     <div className="row d-flex justify-content-around">
       <div className="col-12 col-lg-5 img-fluid" id="product_image">
         <div className="p-3">
@@ -79,28 +116,28 @@ const ProductDetails = () => {
             starSpacing="1px"
           />
           <span id="no-of-reviews" className="pt-1 ps-2">
-            {" "}
-            ({product?.numOfReviews} Reviews){" "}
+            ({product?.numOfReviews} Reviews)
           </span>
         </div>
         <hr />
 
         <p id="product_price">${product?.price}</p>
         <div className="stockCounter d-inline">
-          <span className="btn btn-secondary minus">-</span>
+          <span className="btn btn-secondary minus" onClick={decreaseQty}>-</span>
           <input
             type="number"
             className="form-control count d-inline"
-            value="1"
+            value={quantity}
             readOnly
           />
-          <span className="btn btn-secondary plus">+</span>
+          <span className="btn btn-secondary plus" onClick={increaseQty}>+</span>
         </div>
         <button
           type="button"
           id="cart_btn"
           className="btn btn-primary d-inline ms-4"
           disabled=""
+          onClick={setItemToCart}
         >
           Add to Cart
         </button>
@@ -108,7 +145,7 @@ const ProductDetails = () => {
         <hr />
 
         <p>
-          Status:{" "}
+          Status:
           <span
             id="stock_status"
             className={product?.stock > 0 ? "greenColor" : "redColor"}
@@ -132,6 +169,7 @@ const ProductDetails = () => {
         <Link to={"/"} className="btn_back">Back</Link>
       </div>
     </div>
+    </>
   );
 };
 
