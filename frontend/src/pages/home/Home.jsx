@@ -29,7 +29,7 @@ const Home = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(error?.data?.message);
+      toast.error(error?.data?.message || error.error);
     }
   }, [isError]);
 

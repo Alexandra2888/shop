@@ -5,6 +5,8 @@ import ErrorHandler from "../utils/errorHandler.js";
 import sendToken from "../utils/sendToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import {  upload_file } from "../utils/cloudinary.js";
+
 
 // Register user   =>  /api/v1/register
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -69,42 +71,53 @@ export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Forgot password   =>  /api/v1/password/forgot
-export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
-  // Find user in the database
-  const user = await User.findOne({ email: req.body.email });
 
-  if (!user) {
-    return next(new ErrorHandler("User not found with this email", 404));
-  }
 
-  // Get reset password token
-  const resetToken = user.getResetPasswordToken();
+// @desc      Forgot password
+// @route     POST /api/auth/forgotpassword
+// @access    Public
+export const forgotPassword = catchAsyncErrors(async(req, res) => {
+  const user = await User.findOne({email: req.body.email});
 
-  await user.save();
+  if(!user){
+      res.status(404);
+      throw new Error("There is no user with that email");
+  };
 
-  // Create reset password url
-  const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`;
+  //Get reset token 
+  const resetToken = user.getResetTokenPassword();
+  console.log(resetToken); 
+
+  await user.save({validateBeforeSave: false});
+
+  //Create reset Url
+  const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
 
   const message = getResetPasswordTemplate(user?.name, resetUrl);
 
+              
+  //Sending Email
   try {
-    await sendEmail({
-      email: user.email,
-      subject: "ShopIT Password Recovery",
-      message,
-    });
+      await sendEmail({
+          email: user.email,
+          subject: 'Password reset token',
+          message
+      });
 
-    res.status(200).json({
-      message: `Email sent to: ${user.email}`,
-    });
+      res.status(200).json({
+          success: true,
+          data: "Email sent"
+      });
   } catch (error) {
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+      console.log(error);
+      user.resetPasswordToken = undefined,
+      user.resetPasswordExpire = undefined
 
-    await user.save();
-    return next(new ErrorHandler(error?.message, 500));
-  }
+      await user.save({validateBeforeSave: false});
+
+      res.status(500);
+      throw new Error("Email could not be sent")
+  };
 });
 
 // Reset password   =>  /api/v1/password/reset/:token
@@ -143,6 +156,7 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
+
 
 // Get current user profile  =>  /api/v1/me
 export const getUserProfile = catchAsyncErrors(async (req, res, next) => {

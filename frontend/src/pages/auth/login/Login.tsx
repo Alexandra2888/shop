@@ -18,7 +18,7 @@ useEffect(() => {
     navigate("/")
   }
   if(error) {
-    toast.error(error?.data?.message)
+    toast.error(error?.data?.message || error.error)
   }
 }, [error, isAuthentificated]);
 

@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 const sendEmail = async (options) => {
   const transport = nodemailer.createTransport({
@@ -10,14 +12,17 @@ const sendEmail = async (options) => {
     },
   });
 
+  //Send email with defined transport object
   const message = {
-    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+    from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
     to: options.email,
     subject: options.subject,
     html: options.message,
   };
 
-  await transport.sendMail(message);
+  const info = await transport.sendMail(message);
+
+  console.log("Message sent: %s", info.messageId);
 };
 
 export default sendEmail;

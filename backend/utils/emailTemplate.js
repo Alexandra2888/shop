@@ -556,7 +556,7 @@ export const getResetPasswordTemplate = (username, resetUrl) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        Shop
+                        eShop
                         <br />1234 Street Rd. <br />Suite 1234
                       </p>
                     </td>

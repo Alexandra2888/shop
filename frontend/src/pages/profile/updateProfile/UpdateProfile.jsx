@@ -22,7 +22,7 @@ const UpdateProfile = () => {
     }
 
     if (error) {
-      toast.error(error?.data?.message);
+      toast.error(error?.data?.message || error.error);
     }
 
     if (isSuccess) {

@@ -11,6 +11,8 @@ import Profile from "./pages/profile/Profile/Profile";
 import UpdateProfile from "./pages/profile/updateProfile/UpdateProfile";
 import UploadAvatar from "./pages/profile/uploadAvatar/UploadAvatar";
 import UpdatePassword from "./pages/profile/updatePassword/UpdatePassword";
+import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
+import ResetPassword from "./pages/auth/resetPassword/ResetPassword";
 
 
 function App() {
@@ -21,10 +23,13 @@ function App() {
         <Header />
         <div className="container">
           <Routes>
-        <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/password/forgot" element={<ForgotPassword />} />
+            <Route path="/password/reset/:token" element={<ResetPassword />} />
+
 
             <Route
               path="/me/profile"
