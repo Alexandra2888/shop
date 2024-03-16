@@ -14,6 +14,9 @@ import UpdatePassword from "./pages/profile/updatePassword/UpdatePassword";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
 import ResetPassword from "./pages/auth/resetPassword/ResetPassword";
 import Cart from "./pages/cart/Cart";
+import Shipping from "./pages/shipping/Shipping";
+import ConfirmOrder from "./pages/confirmOrder/ConfirmOrder";
+import PaymentMethod from "./pages/paymentMethod/PaymentMethod";
 
 
 function App() {
@@ -64,6 +67,31 @@ function App() {
               element={
                 <ProtectedRoute>
                   <UpdatePassword />
+                </ProtectedRoute>
+              }
+            />
+              <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/shipping"
+              element={
+                <ProtectedRoute>
+                  <Shipping />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/confirm_order"
+              element={
+                <ProtectedRoute>
+                  <ConfirmOrder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment_method"
+              element={
+                <ProtectedRoute>
+                  <PaymentMethod />
                 </ProtectedRoute>
               }
             />
