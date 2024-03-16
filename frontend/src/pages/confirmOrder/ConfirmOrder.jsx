@@ -1,6 +1,6 @@
 import MetaData from "../../components/metadata/Metadata";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { calculateOrderCost } from "../../helpers/helpers";
 import CheckoutSteps from "../../components/checkoutSteps/CheckoutSteps";
 
@@ -10,6 +10,9 @@ const ConfirmOrder = () => {
 
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
     calculateOrderCost(cartItems);
+
+
+
 
   return (
     <>

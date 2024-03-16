@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 const CheckoutSteps = ({ shipping, confirmOrder, payment }) => {
   return (
     <div className="checkout-progress d-flex justify-content-center mt-5">
