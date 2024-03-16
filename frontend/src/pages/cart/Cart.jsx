@@ -85,7 +85,7 @@ const Cart = () => {
                     <div className="col-4 col-lg-3 mt-4 mt-lg-0">
                       <div className="stockCounter d-inline">
                         <span
-                          className="btn btn-danger minus"
+                          className="btn btn-secondary minus"
                           onClick={() => decreseQty(item, item.quantity)}
                         >
                           {" "}
@@ -95,10 +95,10 @@ const Cart = () => {
                           type="number"
                           className="form-control count d-inline"
                           value={item?.quantity}
-                          readonly
+                          readOnly
                         />
                         <span
-                          className="btn btn-primary plus"
+                          className="btn btn-secondary plus"
                           onClick={() => increseQty(item, item.quantity)}
                         >
                           {" "}

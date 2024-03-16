@@ -70,7 +70,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-              <Route path="/cart" element={<Cart />} />
             <Route
               path="/shipping"
               element={
