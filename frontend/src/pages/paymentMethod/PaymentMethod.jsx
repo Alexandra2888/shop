@@ -3,7 +3,7 @@ import MetaData from "../../components/metadata/Metadata";
 import { useSelector } from "react-redux";
 import CheckoutSteps from "../../components/checkoutSteps/CheckoutSteps";
 import { calculateOrderCost } from "../../helpers/helpers";
-import { useCreateNewOrderMutation } from "../../store/api/orderApi";
+import { useCreateNewOrderMutation, useStripeCheckoutSessionMutation } from "../../store/api/orderApi";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -14,8 +14,24 @@ const PaymentMethod = () => {
 
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
 
-  const [createNewOrder, { isLoading, error, isSuccess }] =
-    useCreateNewOrderMutation();
+  const [createNewOrder, { error, isSuccess }] = useCreateNewOrderMutation();
+
+  const [
+    stripeCheckoutSession,
+    { data: checkoutData, error: checkoutError, isLoading },
+  ] = useStripeCheckoutSessionMutation();
+
+  useEffect(() => {
+    if (checkoutData) {
+      console.log(checkoutData);
+      window.location.href = checkoutData?.url;
+    }
+
+
+    if (checkoutError) {
+      toast.error(checkoutError?.data?.message);
+    }
+  }, [checkoutData, checkoutError]);
 
   useEffect(() => {
     if (error) {
@@ -23,7 +39,7 @@ const PaymentMethod = () => {
     }
 
     if (isSuccess) {
-      navigate("/");
+      navigate("/me/orders?order_success=true");
     }
   }, [error, isSuccess]);
 
@@ -53,7 +69,16 @@ const PaymentMethod = () => {
 
     if (method === "Card") {
       // Stripe Checkout
-      alert("Card");
+      const orderData = {
+        shippingInfo,
+        orderItems: cartItems,
+        itemsPrice,
+        shippingAmount: shippingPrice,
+        taxAmount: taxPrice,
+        totalAmount: totalPrice,
+      };
+
+      stripeCheckoutSession(orderData);
     }
   };
 
@@ -103,5 +128,6 @@ const PaymentMethod = () => {
     </>
   );
 };
+
 
 export default PaymentMethod;
