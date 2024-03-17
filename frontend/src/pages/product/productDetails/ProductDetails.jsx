@@ -1,16 +1,20 @@
 import  { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../../../store/api/productsApi";
 import { toast } from "react-hot-toast";
 import Loader from "../../../components/loader/Loader";
 import StarRatings from "react-star-ratings";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCartItem } from "../../../store/features/cartSlice";
 import MetaData from "../../../components/metadata/Metadata";
+import ListReviews from "../../../components/reviews/listReviews/ListReviews";
+import NewReview from "../../../components/reviews/newReview/NewReview";
 
 const ProductDetails = () => {
   const params = useParams();
   const dispatch = useDispatch();
+
+  const { isAuthentificated } = useSelector((state) => state.auth);
 
 
   const [quantity, setQuantity] = useState(0);
@@ -160,17 +164,22 @@ const ProductDetails = () => {
         <p>{product?.description}</p>
         <hr />
         <p id="product_seller mb-3">
-          Sold by: <strong>{product?.seller}</strong>
-        </p>
+            Sold by: <strong>{product?.seller}</strong>
+          </p>
 
-        <div className="alert alert-danger my-5" type="alert">
-          Login to post your review.
+        {isAuthentificated ? ( <NewReview/> ) : (
+           <div className="alert alert-danger my-5" type="alert">
+           Login to post your review.
+         </div>
+        )}
         </div>
-        <Link to={"/"} className="btn_back">Back</Link>
       </div>
-    </div>
+      {product?.reviews?.length > 0 && (
+        <ListReviews reviews={product?.reviews} />
+      )}
     </>
   );
 };
+
 
 export default ProductDetails;
