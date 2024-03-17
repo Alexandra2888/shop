@@ -72,7 +72,7 @@ const ProductDetails = () => {
 
   return (
     <>
-          <MetaData title={product?.name} />
+    <MetaData title={product?.name} />
     <div className="row d-flex justify-content-around">
       <div className="col-12 col-lg-5 img-fluid" id="product_image">
         <div className="p-3">
@@ -120,27 +120,32 @@ const ProductDetails = () => {
             starSpacing="1px"
           />
           <span id="no-of-reviews" className="pt-1 ps-2">
-            ({product?.numOfReviews} Reviews)
+            {" "}
+            ({product?.numOfReviews} Reviews){" "}
           </span>
         </div>
         <hr />
 
         <p id="product_price">${product?.price}</p>
         <div className="stockCounter d-inline">
-          <span className="btn btn-secondary minus" onClick={decreaseQty}>-</span>
+          <span className="btn btn-secondary" onClick={decreaseQty}>
+            -
+          </span>
           <input
             type="number"
             className="form-control count d-inline"
             value={quantity}
             readOnly
           />
-          <span className="btn btn-secondary plus" onClick={increaseQty}>+</span>
+          <span className="btn btn-secondary" onClick={increaseQty}>
+            +
+          </span>
         </div>
         <button
           type="button"
           id="cart_btn"
           className="btn btn-primary d-inline ms-4"
-          disabled=""
+          disabled={product.stock <= 0}
           onClick={setItemToCart}
         >
           Add to Cart
@@ -149,7 +154,7 @@ const ProductDetails = () => {
         <hr />
 
         <p>
-          Status:
+          Status:{" "}
           <span
             id="stock_status"
             className={product?.stock > 0 ? "greenColor" : "redColor"}
@@ -164,20 +169,22 @@ const ProductDetails = () => {
         <p>{product?.description}</p>
         <hr />
         <p id="product_seller mb-3">
-            Sold by: <strong>{product?.seller}</strong>
-          </p>
+          Sold by: <strong>{product?.seller}</strong>
+        </p>
 
-        {isAuthentificated ? ( <NewReview/> ) : (
-           <div className="alert alert-danger my-5" type="alert">
-           Login to post your review.
-         </div>
+        {isAuthentificated ? (
+          <NewReview productId={product?._id} />
+        ) : (
+          <div className="alert alert-danger my-5" type="alert">
+            Login to post your review.
+          </div>
         )}
-        </div>
       </div>
-      {product?.reviews?.length > 0 && (
-        <ListReviews reviews={product?.reviews} />
-      )}
-    </>
+    </div>
+    {product?.reviews?.length > 0 && (
+      <ListReviews reviews={product?.reviews} />
+    )}
+  </>
   );
 };
 
