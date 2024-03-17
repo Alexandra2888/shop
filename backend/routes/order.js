@@ -11,8 +11,8 @@ import {
 const router = express.Router();
 
 router.route("/orders/new").post(isAuthentificateUser, newOrder);
-router.route("/orders/:id").post(isAuthentificateUser, getOrderDetails);
-router.route("/me/orders").post(isAuthentificateUser, myOrders);
+router.route("/orders/:id").get(isAuthentificateUser, getOrderDetails);
+router.route("/me/orders").get(isAuthentificateUser, myOrders);
 
 router
   .route("/admin/orders")

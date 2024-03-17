@@ -114,8 +114,6 @@ export const deleteOrder = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
-
 // Create/Update product review   =>  /api/v1/reviews
 export const createProductReview = catchAsyncErrors(async (req, res, next) => {
   const { rating, comment, productId } = req.body;

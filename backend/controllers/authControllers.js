@@ -76,48 +76,42 @@ export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
 // @desc      Forgot password
 // @route     POST /api/auth/forgotpassword
 // @access    Public
-export const forgotPassword = catchAsyncErrors(async(req, res) => {
-  const user = await User.findOne({email: req.body.email});
+// Forgot password   =>  /api/v1/password/forgot
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  // Find user in the database
+  const user = await User.findOne({ email: req.body.email });
 
-  if(!user){
-      res.status(404);
-      throw new Error("There is no user with that email");
-  };
+  if (!user) {
+    return next(new ErrorHandler("User not found with this email", 404));
+  }
 
-  //Get reset token 
-  const resetToken = user.getResetTokenPassword();
-  console.log(resetToken); 
+  // Get reset password token
+  const resetToken = user.getResetPasswordToken();
 
-  await user.save({validateBeforeSave: false});
+  await user.save();
 
-  //Create reset Url
-  const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+  // Create reset password url
+  const resetUrl = "http://localhost:5173/password/reset/${resetToken}";
 
   const message = getResetPasswordTemplate(user?.name, resetUrl);
 
-              
-  //Sending Email
   try {
-      await sendEmail({
-          email: user.email,
-          subject: 'Password reset token',
-          message
-      });
+    await sendEmail({
+      email: user.email,
+      subject: "ShopIT Password Recovery",
+      message,
+    });
 
-      res.status(200).json({
-          success: true,
-          data: "Email sent"
-      });
+    res.status(200).json({
+      message: `Email sent to: ${user.email}`,
+    });
   } catch (error) {
-      console.log(error);
-      user.resetPasswordToken = undefined,
-      user.resetPasswordExpire = undefined
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
 
-      await user.save({validateBeforeSave: false});
-
-      res.status(500);
-      throw new Error("Email could not be sent")
-  };
+    await user.save();
+    return next(new ErrorHandler(error?.message, 500));
+  }
 });
 
 // Reset password   =>  /api/v1/password/reset/:token
@@ -156,8 +150,6 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
-
-
 // Get current user profile  =>  /api/v1/me
 export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req?.user?._id);

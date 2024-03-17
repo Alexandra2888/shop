@@ -1,10 +1,10 @@
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import Stripe from "stripe";
-import Order from "../models/order.js"
+import Order from "../models/order.js";
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-//create stripe checkout session => /api/v1/payment/checkout_session
+// Create stripe checkout session   =>  /api/v1/payment/checkout_session
 export const stripeCheckoutSession = catchAsyncErrors(
   async (req, res, next) => {
     const body = req?.body;
@@ -34,7 +34,8 @@ export const stripeCheckoutSession = catchAsyncErrors(
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      success_url: "http://localhost:5173/me/orders",
+      success_url: `${process.env.FRONTEND_URL}/me/orders?order_success=true`,
+      success_url: "http://localhost:5173/me/orders?success=true",
       cancel_url: "http://localhost:5173",
       customer_email: req?.user?.email,
       client_reference_id: req?.user?._id?.toString(),
@@ -47,8 +48,6 @@ export const stripeCheckoutSession = catchAsyncErrors(
       ],
       line_items,
     });
-
-    console.log(session);
 
     res.status(200).json({
       url: session.url,
