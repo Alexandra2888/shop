@@ -15,10 +15,10 @@ const ResetPassword = () => {
   const [resetPassword, { isLoading, error, isSuccess }] =
     useResetPasswordMutation();
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthentificated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthentificated) {
       navigate("/");
     }
     if (error) {
@@ -29,7 +29,7 @@ const ResetPassword = () => {
       toast.success("Password reset successfully");
       navigate("/login");
     }
-  }, [error, isAuthenticated, isSuccess]);
+  }, [error, isAuthentificated, isSuccess]);
 
   const submitHandler = (e) => {
     e.preventDefault();
